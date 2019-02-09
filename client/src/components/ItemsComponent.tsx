@@ -15,9 +15,11 @@ export class ItemsComponent extends React.Component<Books, {}> {
            <div>
                <h1>Library</h1>
                <ul>
-                   {this.props.books.map(function(book: Book){
-                       return <li><ItemComponent book={book}/></li>;
-                   })}
+                   {
+                       this.props.books.map(function(book: Book){
+                        return <li><ItemComponent book={book}/></li>;
+                        })
+                   }
                </ul>
            </div>
        )

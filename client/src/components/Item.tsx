@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Inventory, InventoryComponent} from "./Inventory";
+import {Inventory, InventoryComponent, InventoryProps} from "./Inventory";
 
 
 export interface Book {
@@ -21,7 +21,11 @@ export class ItemComponent extends React.Component<BookProps, {}> {
         return (
             <div>
                 Description: {this.props.book.description}
-                <InventoryComponent inventory={this.props.book.inventory} />
+                {
+                    this.props.book.inventory.map(function(i: Inventory){
+                       return <InventoryComponent inventory={i} />
+                    })
+                }
             </div>
         )
     }

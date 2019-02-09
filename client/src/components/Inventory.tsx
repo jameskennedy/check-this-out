@@ -1,4 +1,5 @@
 import * as React from "react";
+import {LabelledField} from "./LabelledField";
 
 export interface Inventory {
     formattedId: string,
@@ -8,7 +9,7 @@ export interface Inventory {
 }
 
 export interface InventoryProps {
-    inventory: Inventory[]
+    inventory: Inventory
 }
 
 export class InventoryComponent extends React.Component<InventoryProps, {}> {
@@ -19,14 +20,10 @@ export class InventoryComponent extends React.Component<InventoryProps, {}> {
     render() {
         return (
             <div><p>
-                {
-                    this.props.inventory.map(function(inventory: Inventory){
-                        return inventory.formattedId + ' | '
-                            + inventory.status + ' | '
-                            + inventory.checkedOutBy + '|'
-                            + inventory.checkedOutOn + "\n"
-                    })
-                }
+                <LabelledField name="ID" value={this.props.inventory.formattedId}/>
+                <LabelledField name="Status" value={this.props.inventory.status}/>
+                <LabelledField name="Checked Out" value={this.props.inventory.checkedOutBy}/>
+                <LabelledField name="Checked On" value={this.props.inventory.checkedOutOn}/>
             </p></div>
         )
     }
