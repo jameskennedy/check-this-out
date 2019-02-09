@@ -16,8 +16,10 @@ class ItemController @Inject()(repo: ItemRepository,
                               )(implicit ec: ExecutionContext)
   extends MessagesAbstractController(cc) {
 
-  implicit val itemReads = Json.reads[Item]
-  implicit val itemWrites = Json.writes[Item]
+  implicit val inventoryItemReads = Json.reads[InventoryItemTuple]
+  implicit val inventoryItemWrites = Json.writes[InventoryItemTuple]
+  implicit val itemReads = Json.reads[ItemResult]
+  implicit val itemWrites = Json.writes[ItemResult]
 
   val itemForm: Form[CreateItemForm] = Form {
     mapping(
@@ -36,7 +38,7 @@ class ItemController @Inject()(repo: ItemRepository,
       item => {
         repo.create(item.name, item.description).map { item =>
           // If successful, we simply redirect to the index page.
-          Ok(Json.toJson(item))
+          Ok(Json.toJson(new ItemResult(item.id, item.name, item.description, List())))
         }
       }
     )
