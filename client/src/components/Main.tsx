@@ -1,48 +1,51 @@
 import * as React from "react";
 import {ItemsComponent} from "./ItemsComponent";
 import {Book} from "./Item";
+import {GreetingComponent} from "./GreetingComponent";
+import DefaultHttpClient from "./request/HttpClient";
 
-export interface HelloProps { username: string; }
+export class Main extends React.Component {
 
-const books =[
-    {
-        description: 'Project to Product',
-        type: 'Book',
-        inventory: [
-            {
-                formattedId: 'MK-001',
-                status: 'checked out',
-                checkedOutOn: '2019-01-01',
-                checkedOutBy: 'Ryan Nosworthy'
-            },
-            {
-                formattedId: 'MK-002',
-                status: 'checked out',
-                checkedOutOn: '2019-02-01',
-                checkedOutBy: 'James Kennedy'
-            }
-        ]
-    },
-    {
-        description: 'How to Develop In React',
-        type: 'Book',
-        inventory: [
-            {
-                formattedId: 'BK-101',
-                status: 'available',
-                checkedOutOn: undefined,
-                checkedOutBy: undefined,
-            }
-        ]
+    state = {
+        books: []
+    };
+
+    componentDidMount() {
+        new DefaultHttpClient().get<Book[]>('http://localhost:9000/items').then(response => {
+            const books = response.data.map(b => {
+                return {
+                    id: b.id,
+                    name: b.name,
+                    description: b.description,
+                    inventory: b.inventory
+                };
+            });
+
+            const newState = Object.assign({}, this.state, {
+                books: books
+            });
+
+            this.setState(newState);
+
+        }).catch(error => console.log(error));
     }
-];
 
-export class Main extends React.Component<HelloProps, {}> {
+    getUser(){
+        const queryParams = new URLSearchParams(window.location.search);
+        let user = queryParams.get("username");
+        if (user === undefined || user === null){
+            user = "Anonymous";
+        }
+        return user;
+    }
+
     render() {
+        let user = this.getUser();
+
         return (
             <div>
-                <h1>Greetings {this.props.username}, Welcome to Check This Out!</h1>
-                <ItemsComponent books={books}/>
+                <GreetingComponent username={user}/>
+                <ItemsComponent books={this.state.books} username={user}/>
             </div>
         );
     }

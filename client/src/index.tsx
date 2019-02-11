@@ -4,6 +4,7 @@ import * as ReactDOM from "react-dom";
 import { Main } from "./components/Main";
 
 ReactDOM.render(
-    <Main username="Ryan" />,
+
+    <Main />,
     document.getElementById("main")
 );
